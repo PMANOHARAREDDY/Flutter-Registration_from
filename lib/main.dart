@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// in-memory data Storage i.e in a map
+Map<String, List<String>> userDetails = {};
+
 void main() {
   runApp(const MyApp());
 }
@@ -29,7 +32,7 @@ class RegisterPage extends StatefulWidget{
 }
 
 class _RegisterPageState extends State<RegisterPage>{
-  // Create Controllers
+  // Controllers
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
@@ -147,10 +150,11 @@ class _RegisterPageState extends State<RegisterPage>{
               ),
               TextField(
                 controller : passwordController,
-                 decoration: const InputDecoration(
+                obscureText: true,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter your password',
-                 ), 
+                ), 
               ),
               const SizedBox(
                 height: 10,
@@ -161,6 +165,7 @@ class _RegisterPageState extends State<RegisterPage>{
               ),
               TextField(
                 controller : confirmPasswordController,
+                obscureText: true,
                  decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter your password again',
@@ -171,12 +176,38 @@ class _RegisterPageState extends State<RegisterPage>{
               ),
               ElevatedButton(
                 onPressed: (){
-                  print(nameController.text);
-                  print(emailController.text);
-                  print(mobileController.text);
-                  print(addressController.text);
-                  print(passwordController.text);
-                  print(confirmPasswordController.text);
+                  
+                  String name = nameController.text.trim();
+                  String email = emailController.text.trim();
+                  String mobile = mobileController.text.trim();
+                  String address = addressController.text.trim();
+                  String password = passwordController.text.trim();
+                  String confirmPassword = confirmPasswordController.text.trim();
+
+                  if(email.isEmpty || password.isEmpty || confirmPassword.isEmpty || mobile.isEmpty || name.isEmpty || address.isEmpty){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please fill all the fields')),
+                    );
+                    return;
+                  }
+
+                  if(password != confirmPassword){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Passwords are not matching')),
+                    );
+                    return;
+                  }
+
+                  if(userDetails.containsKey(email)){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('This email is already registered with us try logging in'))
+                    );
+                    return;
+                  }
+
+                  userDetails[email] = [name, mobile, address, password];
+                  print('User Registered: $email -> ${userDetails[email]}');
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const HomePage()),
@@ -275,6 +306,7 @@ class _LoginPageState extends State<LoginPage>{
               ),
               TextField(
                 controller : passwordController,
+                obscureText: true,
                  decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter your password',
@@ -287,12 +319,34 @@ class _LoginPageState extends State<LoginPage>{
 
               ElevatedButton(
                 onPressed: (){
-                  print(emailController.text);
-                  print(passwordController.text);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SuccessPage()),
-                  );
+
+                  String email = emailController.text.trim();
+                  String password = passwordController.text.trim();
+
+                  if(!userDetails.containsKey(email)){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('User not found'))
+                    );
+                    emailController.clear();
+                    passwordController.clear();
+                    return;
+                  }
+
+                  if(userDetails[email]![3]==password){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SuccessPage(email: email)),
+                    );
+                  }
+                  
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Password not matched'))
+                    );
+                    passwordController.clear();
+                    return;
+                  }
+                  
                 }, 
                 child: Text('sign in',
                 style: TextStyle(fontSize: 20),
@@ -307,7 +361,9 @@ class _LoginPageState extends State<LoginPage>{
 }
 
 class SuccessPage extends StatelessWidget {
-  const SuccessPage({super.key});
+  final String email;
+
+  const SuccessPage({super.key, required this.email});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -317,7 +373,7 @@ class SuccessPage extends StatelessWidget {
       ),
       body: Center(
         child: Text(
-          'Log-in Successful!',
+          'Log-in Successful! welcome ${userDetails[email]![0]}',
           style: TextStyle(fontSize: 24),
         ),
       ),
