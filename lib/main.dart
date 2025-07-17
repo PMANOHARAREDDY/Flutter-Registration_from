@@ -5,22 +5,17 @@ Map<String, List<String>> userDetails = {};
 
 class LoggedInUser {
   static final LoggedInUser _instance = LoggedInUser._internal();
-
   String? name;
   String? email;
   String? mobile;
   String? address;
   String? password;
-
-  // Private constructor
   LoggedInUser._internal();
 
-  // Public constructor (optional, for constructor-style access)
   factory LoggedInUser() {
     return _instance;
   }
 
-  // Preferred way: access via `.instance`
   static LoggedInUser get instance => _instance;
 
   void setUser(String email, List<String> userData) {
@@ -56,8 +51,61 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 82, 36, 162)),
-        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.purple,      
+        appBarTheme: AppBarTheme(                   
+          backgroundColor: Color.fromARGB(255, 78, 25, 169),
+          iconTheme: IconThemeData(color: Colors.white),
+          titleTextStyle: TextStyle(
+            color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData( 
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(255, 78, 25, 169),
+            foregroundColor: Colors.white,
+            minimumSize: Size(double.infinity, 50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12)
+            ),
+            textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(   
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Color.fromARGB(255, 78, 25, 169)),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Color.fromARGB(255, 78, 25, 169), width: 2),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          hintStyle: TextStyle(color: Colors.grey[600]),
+        ),
+        textTheme: const TextTheme(         
+          bodyMedium: TextStyle(
+            color: Colors.white, fontSize: 16
+          ),
+          titleLarge: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24
+          ),
+          titleSmall: TextStyle(
+            color: Colors.white70
+          ),
+        ),
+        drawerTheme: DrawerThemeData(                  
+          backgroundColor: Color.fromARGB(255, 78, 25, 169),
+          surfaceTintColor: Colors.transparent,
+          scrimColor: Colors.black54,
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(24),
+              bottomRight: Radius.circular(24),
+            ),
+          ),
+        ),
       ),
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
@@ -86,35 +134,43 @@ class _RegisterPageState extends State<RegisterPage>{
     return Scaffold(
       appBar: AppBar(
         title : Text('Registration Page'),
-        backgroundColor: Color.fromARGB(255, 78, 25, 169),
       ),
       drawer: Drawer(
         child: Container(
-          color: Colors.purple,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                ),
                 child: Text(
                   'Optimum Sync',
                   style: TextStyle(
-                    color: Colors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.home),
+                leading: Icon(Icons.home, color: Colors.amberAccent,),
                 title: Text('Home'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const HomePage()),
                   );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.settings, color: Colors.amberAccent,),
+                title: Text('Settings'),
+                onTap: () {
+                  print("Bear up with us.... Under Development");
+                 },
+              ),
+              ListTile(
+                leading: Icon(Icons.help, color: Colors.amberAccent,),
+                title: Text('Help & Feedback'),
+                onTap: () { 
+                  print("Bear up with us.... Under Development");
                 },
               ),
             ]
@@ -133,10 +189,10 @@ class _RegisterPageState extends State<RegisterPage>{
               ),
               TextField(
                 controller : nameController,
-                 decoration: const InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter your Name',
-                 ), 
+                ), 
               ),
               const SizedBox(
                 height: 10,
@@ -165,7 +221,7 @@ class _RegisterPageState extends State<RegisterPage>{
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: 'Enter your phone Number please',
+                  hintText: 'Enter your phone Number',
                 ), 
               ),
               const SizedBox(
@@ -177,10 +233,10 @@ class _RegisterPageState extends State<RegisterPage>{
               ),
               TextField(
                 controller : addressController,
-                 decoration: const InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter your address',
-                 ), 
+                ), 
               ),
               const SizedBox(
                 height: 10,
@@ -207,10 +263,10 @@ class _RegisterPageState extends State<RegisterPage>{
               TextField(
                 controller : confirmPasswordController,
                 obscureText: true,
-                 decoration: const InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter your password again',
-                 ), 
+                ), 
               ),
               SizedBox(
                 height: 10,
@@ -254,15 +310,24 @@ class _RegisterPageState extends State<RegisterPage>{
                     MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 }, 
-                child: Text('Register',
-                style: TextStyle(fontSize: 20),
+                child: Text('Register'),
+                style: ElevatedButton.styleFrom(
+                  elevation: 4,
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
           ),
         ),
-      ), // ListView
-    ); // Scaffold
+      ), 
+    ); 
   }
 }
 
@@ -283,22 +348,16 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login Page'),
-        backgroundColor: const Color.fromARGB(255, 82, 36, 162),
       ),
       drawer: Drawer(
         child: Container(
-          color: Colors.purple,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                ),
                 child: Text(
                   'Optimum Sync',
                   style: TextStyle(
-                    color: Colors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -315,13 +374,27 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.person_add),
+                leading: const Icon(Icons.person_add, color: Colors.amberAccent,),
                 title: const Text('Register'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const RegisterPage()),
                   );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.settings, color: Colors.amberAccent,),
+                title: Text('Settings'),
+                onTap: () {
+                  print("Bear up with us.... Under Development");
+                 },
+              ),
+              ListTile(
+                leading: Icon(Icons.help, color: Colors.amberAccent,),
+                title: Text('Help & Feedback'),
+                onTap: () { 
+                  print("Bear up with us.... Under Development");
                 },
               ),
             ],
@@ -357,6 +430,17 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 25),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 4,
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 onPressed: () {
                   String email = emailController.text.trim();
                   String password = passwordController.text.trim();
@@ -392,7 +476,6 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 child: const Text(
                   'Sign In',
-                  style: TextStyle(fontSize: 20),
                 ),
               ),
             ],
@@ -415,23 +498,19 @@ class SuccessPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Success'),
-        backgroundColor: Color.fromARGB(255, 82, 36, 162),
       ),
       drawer: Drawer(
         child: Container(
-          color: Colors.purple,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                decoration: BoxDecoration(color: Colors.deepPurple),
                 child: Text(
                   'Welcome ${user.name}',
-                  style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.person),
+                leading: Icon(Icons.person, color: Colors.amberAccent,),
                 title: Text('Profile'),
                 onTap: () {
                   Navigator.push(
@@ -441,10 +520,24 @@ class SuccessPage extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.logout),
+                leading: Icon(Icons.logout, color: Colors.amberAccent,),
                 title: Text('Logout'),
                 onTap: () {
                   Navigator.popUntil(context, (route) => route.isFirst);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.settings, color: Colors.amberAccent,),
+                title: Text('Settings'),
+                onTap: () {
+                  print("Bear up with us.... Under Development");
+                 },
+              ),
+              ListTile(
+                leading: Icon(Icons.help, color: Colors.amberAccent,),
+                title: Text('Help & Feedback'),
+                onTap: () { 
+                  print("Bear up with us.... Under Development");
                 },
               ),
             ],
@@ -522,7 +615,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Profile'),
-        backgroundColor: const Color.fromARGB(255, 82, 36, 162),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -580,31 +672,25 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('OS'),
-        backgroundColor: Color.fromARGB(255, 82, 36, 162),
+        title: Text('Optimum Sync'),
       ),
 
       drawer: Drawer(
         child: Container(
-          color: Colors.purple,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                ),
                 child: Text(
                   'Optimum Sync',
                   style: TextStyle(
-                    color: Colors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.person_add),
+                leading: Icon(Icons.person_add, color: Colors.amberAccent,),
                 title: Text('Register'),
                 onTap: () {
                   Navigator.push(
@@ -614,7 +700,7 @@ class HomePage extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.login),
+                leading: Icon(Icons.login, color: Colors.amberAccent,),
                 title: Text('Login'),
                 onTap: () {
                   Navigator.push(
@@ -623,23 +709,49 @@ class HomePage extends StatelessWidget {
                   );
                 },
               ),
+              ListTile(
+                leading: Icon(Icons.settings, color: Colors.amberAccent,),
+                title: Text('Settings'),
+                onTap: () {
+                  print("Bear up with us.... Under Development");
+                 },
+              ),
+              ListTile(
+                leading: Icon(Icons.help, color: Colors.amberAccent,),
+                title: Text('Help & Feedback'),
+                onTap: () { 
+                  print("Bear up with us.... Under Development");
+                },
+              ),
             ]
           ),
         ),
       ),
 
-      body: Center(
-        child: Container(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-            Text(
-              'Welcome to Optimum Sync',
-              style: TextStyle(fontSize: 24),
-              textAlign: TextAlign.center,
+      body: Container(
+        child: Center(
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/images/OSLogo.png',
+                  height : 100,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              Text(
+                'Welcome to Optimum Sync',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
             ),
-          ],
           ),
         ),
       ),
