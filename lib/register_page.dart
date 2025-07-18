@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'login_page.dart';
 import 'home_page.dart';
 import 'db_helper.dart';
 
@@ -180,10 +181,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
                 },
-                child: const Text('Register'),
                 style: ElevatedButton.styleFrom(
                   elevation: 4,
                   minimumSize: const Size(double.infinity, 50),
@@ -195,6 +195,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                child: const Text('Register'),
               ),
             ],
           ),

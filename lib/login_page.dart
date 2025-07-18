@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.home, color: Colors.amberAccent,),
+              leading: const Icon(Icons.home, color: Colors.amberAccent),
               title: const Text('Home'),
               onTap: () {
                 Navigator.pushReplacement(
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.person_add, color: Colors.amberAccent,),
+              leading: const Icon(Icons.person_add, color: Colors.amberAccent),
               title: const Text('Register'),
               onTap: () {
                 Navigator.push(
@@ -99,14 +99,14 @@ class _LoginPageState extends State<LoginPage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.settings, color: Colors.amberAccent,),
+              leading: const Icon(Icons.settings, color: Colors.amberAccent),
               title: const Text('Settings'),
               onTap: () {
                 print("Bear up with us.... Under Development");
               },
             ),
             ListTile(
-              leading: const Icon(Icons.help, color: Colors.amberAccent,),
+              leading: const Icon(Icons.help, color: Colors.amberAccent),
               title: const Text('Help & Feedback'),
               onTap: () {
                 print("Bear up with us.... Under Development");
@@ -156,6 +156,24 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const RegisterPage()),
+                  );
+                },
+                child: const Text(
+                  "Not yet registered? Click here",
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ],
