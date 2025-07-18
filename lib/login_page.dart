@@ -3,7 +3,7 @@ import 'register_page.dart';
 import 'success_page.dart';
 import 'home_page.dart';
 import 'logged_in_user.dart';
-import 'db_helper.dart'; // Import your DB helper!
+import 'db_helper.dart'; 
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

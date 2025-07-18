@@ -43,13 +43,11 @@ class _SuccessPageState extends State<SuccessPage> {
   @override
   Widget build(BuildContext context) {
     if (user == null) {
-      // Show loading spinner or a not-found message
       return Scaffold(
         appBar: AppBar(title: const Text('Success')),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
-    // user was fetched
     return Scaffold(
       appBar: AppBar(
         title: const Text('Success'),
@@ -61,6 +59,10 @@ class _SuccessPageState extends State<SuccessPage> {
             DrawerHeader(
               child: Text(
                 'Optimum Sync',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             ListTile(
@@ -101,6 +103,7 @@ class _SuccessPageState extends State<SuccessPage> {
         child: Text(
           'Log-in Successful! Welcome ${user!['name'] ?? 'User'}',
           style: const TextStyle(fontSize: 24),
+          textAlign: TextAlign.center,
         ),
       ),
     );
