@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'profile_page.dart';
-import 'db_helper.dart';   // Import your db helper!
-import 'logged_in_user.dart'; // For updating the singleton if you wish
+import 'db_helper.dart';   
+import 'logged_in_user.dart'; 
 
 class SuccessPage extends StatefulWidget {
   final String email;

@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // Controllers
+  /// Controllers
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    // Check the database for the user
+    /// Check the database for the user
     final user = await DBHelper.instance.getUser(email);
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     if (user['password'] == password) {
-      // Save info to singleton for app session state
+      /// Save info to singleton for app session state
       LoggedInUser.instance.setUser(email, [
         user['name'],
         user['mobile'],
@@ -145,7 +145,6 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 25),
               ElevatedButton(
                 onPressed: handleLogin,
-                child: const Text('Sign In'),
                 style: ElevatedButton.styleFrom(
                   elevation: 4,
                   minimumSize: const Size(double.infinity, 50),
@@ -157,6 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                child: const Text('Sign In'),
               ),
               const SizedBox(height: 10),
               TextButton(

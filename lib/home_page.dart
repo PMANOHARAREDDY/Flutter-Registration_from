@@ -67,7 +67,6 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Use errorBuilder for safer image loading
               Image.asset(
                 'assets/images/OSLogo.png',
                 height: 100,
@@ -91,7 +90,6 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const LoginPage()),
                 );
                 },
-                child: const Text('Sign In'),
                 style: ElevatedButton.styleFrom(
                   elevation: 4,
                   minimumSize: const Size(double.infinity, 50),
@@ -103,6 +101,7 @@ class HomePage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                child: const Text('Sign In'),
               ),
             ],
           ),

@@ -22,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    // Initially blank; will populate after DB fetch
+    /// Initially blank this will populate after DB fetches
     nameController = TextEditingController();
     mobileController = TextEditingController();
     addressController = TextEditingController();
@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
       addressController.text = dbUser['address'] ?? '';
       passwordController.text = dbUser['password'] ?? '';
 
-      // Also update singleton for consistency
+      /// to Update Singleton for consistency
       user.setUser(user.email!, [
         dbUser['name'],
         dbUser['mobile'],
@@ -75,7 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
       return;
     }
 
-    // Update in SQLite
+    /// to Update in the DB
     await DBHelper.instance.updateUser({
       'email': user.email,
       'name': newName,

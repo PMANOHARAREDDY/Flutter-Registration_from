@@ -11,7 +11,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  // Controllers
+  /// Controllers
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
@@ -159,7 +159,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     return;
                   }
 
-                  // Use SQLite
                   bool exists = await DBHelper.instance.userExists(email);
                   if (exists) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -177,7 +176,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   });
 
                   print('User Registered: $email -> $name, $mobile, $address');
-                  // Optionally clear fields here
 
                   Navigator.pushReplacement(
                     context,
