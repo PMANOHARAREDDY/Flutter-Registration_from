@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
           child: ListView(
             shrinkWrap: true,
             children: [
-              const Text('Email'),
+              const Text('Email*'),
               const SizedBox(height: 5),
               TextField(
                 controller: emailController,
@@ -138,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              const Text('Password'),
+              const Text('Password*'),
               const SizedBox(height: 5),
               TextField(
                 controller: passwordController,

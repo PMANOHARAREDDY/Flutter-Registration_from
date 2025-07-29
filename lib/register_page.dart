@@ -139,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
 
               const SizedBox(height: 10),
-              const Text('Mobile*'),
+              const Text('Mobile'),
               const SizedBox(height: 5),
               TextField(
                 controller: mobileController,
@@ -181,7 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   hintText: 'Enter your password again',
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   String name = nameController.text.trim();
@@ -192,8 +192,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   String confirmPassword = confirmPasswordController.text.trim();
                   String dob = dOBController.text.trim();
 
-                  if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty ||
-                      mobile.isEmpty || name.isEmpty || dob.isEmpty) {
+                  if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty || name.isEmpty || dob.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Please fill all the fields')),
                     );
@@ -205,6 +204,30 @@ class _RegisterPageState extends State<RegisterPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Please enter valid email address'))
                     );
+                    emailController.clear();
+                    return;
+                  }
+                  final allowedDomains = [
+                    'gmail.com',
+                    'yahoo.com',
+                    'hotmail.com',
+                    'outlook.com',
+                    'aol.com',
+                    'icloud.com',
+                    'mail.com',
+                    'protonmail.com',
+                    'zoho.com',
+                    'gmx.com',
+                    'optimumsync.com',
+                    'nie.ac.in',
+                  ];
+
+                  final emailParts = email.split('@');
+                  if (emailParts.length != 2 || !allowedDomains.contains(emailParts[1].toLowerCase())) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please use an email from a public domain like gmail.com, yahoo.com, etc.')),
+                    );
+                    emailController.clear();
                     return;
                   }
 
@@ -231,7 +254,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   final phoneRegEx = RegExp(r'^[6-9]\d{9}$');
 
-                  if (!phoneRegEx.hasMatch(mobile)) {
+                  if (!mobile.isEmpty && !phoneRegEx.hasMatch(mobile)) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Please enter a valid 10-digit phone number'),

@@ -17,6 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late TextEditingController addressController;
   late TextEditingController passwordController;
   late TextEditingController dOBController;
+  final TextEditingController confirmPasswordController = TextEditingController();
 
 
   bool loading = true;
@@ -74,11 +75,29 @@ class _ProfilePageState extends State<ProfilePage> {
     String newAddress = addressController.text.trim();
     String newPassword = passwordController.text.trim();
     String newDOB = dOBController.text.trim();
+    String newConfirmPassword = confirmPasswordController.text.trim();
 
-    if (newName.isEmpty || newMobile.isEmpty || newAddress.isEmpty || newPassword.isEmpty || newDOB.isEmpty) {
+    if (newName.isEmpty || newPassword.isEmpty || newDOB.isEmpty || newConfirmPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all fields')),
       );
+      return;
+    }
+
+    if(newPassword != newConfirmPassword){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Passwords are not matching try again')),
+      );
+      passwordController.clear();
+      confirmPasswordController.clear();
+      return;
+    }
+
+    if (!is18OrOlder(dOBController.text.trim())) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You must be at least 18 years old to use this application')),
+      );
+      dOBController.clear();
       return;
     }
 
@@ -141,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: ListView(
           children: [
             const SizedBox(height: 10),
-            const Text('Name'),
+            const Text('Name*'),
             TextField(
               controller: nameController,
               decoration: const InputDecoration(
@@ -160,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 15),
-            const Text('Date of Birth'),
+            const Text('Date of Birth*'),
             TextField(
               controller: dOBController,
               readOnly: true,
@@ -193,15 +212,25 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const SizedBox(height: 15),
-            const Text('Password'),
+            const Text('Password*'),
             TextField(
               controller: passwordController,
               decoration: const InputDecoration(
-                hintText: 'Password',
+                hintText: 'Password*',
                 border: OutlineInputBorder(),
               ),
               obscureText: true,
             ),
+            const SizedBox(height: 10),
+              const Text('Confirm password*'),
+              TextField(
+                controller: confirmPasswordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter your password again',
+                ),
+              ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: saveChanges,
