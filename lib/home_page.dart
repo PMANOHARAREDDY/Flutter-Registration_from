@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/help.dart';
+import 'help.dart';
 import 'register_page.dart';
 import 'login_page.dart';
 import 'SettingsWel.dart';

@@ -50,10 +50,6 @@ class MyApp extends StatelessWidget {
             borderSide: BorderSide(color: Color(0xffc9f9ff)),
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color:Color(0xffc9f9ff) , width: 2),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
           hintStyle: TextStyle(color: Colors.black),
         ),
         textTheme: const TextTheme(
@@ -106,10 +102,6 @@ class MyApp extends StatelessWidget {
           fillColor: Colors.white,
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xff917cab)),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff917cab), width: 2),
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           hintStyle: TextStyle(color: Colors.grey[600]),

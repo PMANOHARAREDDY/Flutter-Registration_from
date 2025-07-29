@@ -6,6 +6,7 @@ class LoggedInUser {
   String? mobile;
   String? address;
   String? password;
+  String? date_of_birth;
 
   LoggedInUser._internal();
 
@@ -22,14 +23,16 @@ class LoggedInUser {
     mobile = userData[1];
     address = userData[2];
     password = userData[3];
+    date_of_birth = userData[4];
   }
 
   // Update in-memory data only!
-  void updateUser(String newName, String newMobile, String newAddress, String newPassword) {
+  void updateUser(String newName, String newMobile, String newAddress, String newPassword, String newDOB) {
     name = newName;
     mobile = newMobile;
     address = newAddress;
     password = newPassword;
+    date_of_birth = newDOB;
     // NO database writing here!
     // Only update the DB from your UI or controller using DBHelper.
   }
@@ -41,5 +44,6 @@ class LoggedInUser {
     mobile = null;
     address = null;
     password = null;
+    date_of_birth = null;
   }
 }

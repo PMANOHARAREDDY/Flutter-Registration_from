@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'settings.dart';
 import 'db_helper.dart';   // Import your db helper!
 import 'logged_in_user.dart'; // For updating the singleton if you wish
+import 'help.dart';
 
 class SuccessPage extends StatefulWidget {
   final String email;
@@ -32,6 +33,7 @@ class _SuccessPageState extends State<SuccessPage> {
           dbUser['mobile'],
           dbUser['address'],
           dbUser['password'],
+          dbUser['date_of_birth'],
         ],
       );
     }
@@ -86,7 +88,10 @@ class _SuccessPageState extends State<SuccessPage> {
               leading: const Icon(Icons.help, color: Colors.amberAccent,),
               title: const Text('Help & Feedback'),
               onTap: () { 
-                print("Bear up with us.... Under Development");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Help()),
+                );
               },
             ),
           ],

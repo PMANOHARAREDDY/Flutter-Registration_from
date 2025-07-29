@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/help.dart';
+import 'help.dart';
 import 'login_page.dart';
 import 'home_page.dart';
 import 'db_helper.dart';
@@ -22,6 +22,27 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController dOBController = TextEditingController();
+
+  bool is18OrOlder(String dobStr) {
+  try {
+    List<String> parts = dobStr.split('/');
+    if (parts.length != 3) return false;
+    int day = int.parse(parts[0]);
+    int month = int.parse(parts[1]);
+    int year = int.parse(parts[2]);
+    DateTime dob = DateTime(year, month, day);
+    DateTime today = DateTime.now();
+
+    int age = today.year - dob.year;
+    if (today.month < dob.month || (today.month == dob.month && today.day < dob.day)) {
+      age--;
+    }
+    return age >= 18;
+  } catch (e) {
+    return false;
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -202,6 +223,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         duration: Duration(seconds: 4),
                       ),
                     );
+
+
                     return;
                   }
 
@@ -214,6 +237,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         content: Text('Please enter a valid 10-digit phone number'),
                       ),
                     );
+                    return;
+                  }
+
+                  if (!is18OrOlder(dOBController.text.trim())) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('You must be at least 18 years old to register.')),
+                    );
+                    dOBController.clear();
                     return;
                   }
 

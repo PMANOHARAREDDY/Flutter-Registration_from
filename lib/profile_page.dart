@@ -16,6 +16,8 @@ class _ProfilePageState extends State<ProfilePage> {
   late TextEditingController mobileController;
   late TextEditingController addressController;
   late TextEditingController passwordController;
+  late TextEditingController dOBController;
+
 
   bool loading = true;
 
@@ -27,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
     mobileController = TextEditingController();
     addressController = TextEditingController();
     passwordController = TextEditingController();
+    dOBController = TextEditingController();
     loadUserFromDb();
   }
 
@@ -41,6 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
       mobileController.text = dbUser['mobile'] ?? '';
       addressController.text = dbUser['address'] ?? '';
       passwordController.text = dbUser['password'] ?? '';
+      dOBController.text = dbUser['date_of_birth'] ?? '';
 
       // Also update singleton for consistency
       user.setUser(user.email!, [
@@ -48,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
         dbUser['mobile'],
         dbUser['address'],
         dbUser['password'],
+        dbUser['date_of_birth'],
       ]);
     }
     setState(() => loading = false);
@@ -59,6 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
     mobileController.dispose();
     addressController.dispose();
     passwordController.dispose();
+    dOBController.dispose();
     super.dispose();
   }
 
@@ -67,8 +73,9 @@ class _ProfilePageState extends State<ProfilePage> {
     String newMobile = mobileController.text.trim();
     String newAddress = addressController.text.trim();
     String newPassword = passwordController.text.trim();
+    String newDOB = dOBController.text.trim();
 
-    if (newName.isEmpty || newMobile.isEmpty || newAddress.isEmpty || newPassword.isEmpty) {
+    if (newName.isEmpty || newMobile.isEmpty || newAddress.isEmpty || newPassword.isEmpty || newDOB.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all fields')),
       );
@@ -82,10 +89,11 @@ class _ProfilePageState extends State<ProfilePage> {
       'mobile': newMobile,
       'address': newAddress,
       'password': newPassword,
+      'date_of_birth' : newDOB,
     });
 
     // Update singleton
-    user.updateUser(newName, newMobile, newAddress, newPassword);
+    user.updateUser(newName, newMobile, newAddress, newPassword, newDOB);
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Profile updated successfully!')),
@@ -93,6 +101,27 @@ class _ProfilePageState extends State<ProfilePage> {
 
     setState(() {}); // Optional, to refresh if needed
   }
+
+  bool is18OrOlder(String dobStr) {
+    try {
+      List<String> parts = dobStr.split('/');
+      if (parts.length != 3) return false;
+      int day = int.parse(parts[0]);
+      int month = int.parse(parts[1]);
+      int year = int.parse(parts[2]);
+      DateTime dob = DateTime(year, month, day);
+      DateTime today = DateTime.now();
+
+      int age = today.year - dob.year;
+      if (today.month < dob.month || (today.month == dob.month && today.day < dob.day)) {
+        age--;
+      }
+      return age >= 18;
+    } 
+    catch (e) {
+      return false;
+    }
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +151,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 15),
             const Text('Phone Number'),
-            const SizedBox(height: 10,),
             TextField(
               controller: mobileController,
               decoration: const InputDecoration(
@@ -132,8 +160,31 @@ class _ProfilePageState extends State<ProfilePage> {
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 15),
+            const Text('Date of Birth'),
+            TextField(
+              controller: dOBController,
+              readOnly: true,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Select your Date of Birth',
+                suffixIcon: Icon(Icons.calendar_today),
+              ),
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime(2000),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+
+                String formattedDate = "${pickedDate?.day}/${pickedDate?.month}/${pickedDate?.year}";
+                setState(() {
+                  dOBController.text = formattedDate;
+                });
+              },
+            ),
+            const SizedBox(height: 15),
             const Text('Address'),
-            const SizedBox(height: 10,),
             TextField(
               controller: addressController,
               decoration: const InputDecoration(
@@ -143,7 +194,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 15),
             const Text('Password'),
-            const SizedBox(height: 10,),
             TextField(
               controller: passwordController,
               decoration: const InputDecoration(
@@ -152,7 +202,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               obscureText: true,
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: saveChanges,
               child: const Text('Save Changes'),

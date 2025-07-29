@@ -55,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         user['mobile'],
         user['address'],
         user['password'],
+        user['date_of_birth'],
       ]);
       Navigator.pushReplacement(
         context,
