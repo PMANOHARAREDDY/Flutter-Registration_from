@@ -22,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    /// Initially blank this will populate after DB fetches
+    // Initially blank; will populate after DB fetch
     nameController = TextEditingController();
     mobileController = TextEditingController();
     addressController = TextEditingController();
@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
       addressController.text = dbUser['address'] ?? '';
       passwordController.text = dbUser['password'] ?? '';
 
-      /// to Update Singleton for consistency
+      // Also update singleton for consistency
       user.setUser(user.email!, [
         dbUser['name'],
         dbUser['mobile'],
@@ -75,7 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
       return;
     }
 
-    /// to Update in the DB
+    // Update in SQLite
     await DBHelper.instance.updateUser({
       'email': user.email,
       'name': newName,
@@ -111,6 +111,8 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(20),
         child: ListView(
           children: [
+            const SizedBox(height: 10),
+            const Text('Name'),
             TextField(
               controller: nameController,
               decoration: const InputDecoration(
@@ -119,6 +121,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const SizedBox(height: 15),
+            const Text('Phone Number'),
+            const SizedBox(height: 10,),
             TextField(
               controller: mobileController,
               decoration: const InputDecoration(
@@ -128,6 +132,8 @@ class _ProfilePageState extends State<ProfilePage> {
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 15),
+            const Text('Address'),
+            const SizedBox(height: 10,),
             TextField(
               controller: addressController,
               decoration: const InputDecoration(
@@ -136,6 +142,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const SizedBox(height: 15),
+            const Text('Password'),
+            const SizedBox(height: 10,),
             TextField(
               controller: passwordController,
               decoration: const InputDecoration(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'profile_page.dart';
-import 'db_helper.dart';   
-import 'logged_in_user.dart'; 
+import 'settings.dart';
+import 'db_helper.dart';   // Import your db helper!
+import 'logged_in_user.dart'; // For updating the singleton if you wish
 
 class SuccessPage extends StatefulWidget {
   final String email;
@@ -66,16 +66,6 @@ class _SuccessPageState extends State<SuccessPage> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.person, color: Colors.amberAccent,),
-              title: const Text('Profile'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()),
-                );
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.logout, color: Colors.amberAccent,),
               title: const Text('Logout'),
               onTap: () {
@@ -86,7 +76,10 @@ class _SuccessPageState extends State<SuccessPage> {
               leading: const Icon(Icons.settings, color: Colors.amberAccent,),
               title: const Text('Settings'),
               onTap: () {
-                print("Bear up with us.... Under Development");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Settings()),
+                );
               },
             ),
             ListTile(

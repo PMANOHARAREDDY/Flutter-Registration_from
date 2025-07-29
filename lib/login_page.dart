@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/help.dart';
 import 'register_page.dart';
 import 'success_page.dart';
 import 'home_page.dart';
@@ -13,7 +14,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  /// Controllers
+
+  // Controllers
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -28,7 +30,14 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    /// Check the database for the user
+    final emailRegEx = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+    if(!emailRegEx.hasMatch(email)){
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter valid email address'))
+      );
+      return;
+    }
+    // Check the database for the user
     final user = await DBHelper.instance.getUser(email);
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -40,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     if (user['password'] == password) {
-      /// Save info to singleton for app session state
+      // Save info to singleton for app session state
       LoggedInUser.instance.setUser(email, [
         user['name'],
         user['mobile'],
@@ -99,17 +108,13 @@ class _LoginPageState extends State<LoginPage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.settings, color: Colors.amberAccent),
-              title: const Text('Settings'),
-              onTap: () {
-                print("Bear up with us.... Under Development");
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.help, color: Colors.amberAccent),
               title: const Text('Help & Feedback'),
               onTap: () {
-                print("Bear up with us.... Under Development");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Help()),
+                );
               },
             ),
           ],
@@ -169,8 +174,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: const Text(
                   "Not yet registered? Click here",
                   style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
+                    color: Colors.black,
+                    fontSize: 18,
                     decoration: TextDecoration.underline,
                   ),
                   textAlign: TextAlign.center,

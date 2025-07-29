@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/help.dart';
 import 'register_page.dart';
 import 'login_page.dart';
+import 'SettingsWel.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -48,14 +50,20 @@ class HomePage extends StatelessWidget {
               leading: const Icon(Icons.settings, color: Colors.amberAccent,),
               title: const Text('Settings'),
               onTap: () {
-                print("Bear up with us.... Under Development");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SettingsWel()),
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.help, color: Colors.amberAccent,),
               title: const Text('Help & Feedback'),
               onTap: () {
-                print("Bear up with us.... Under Development");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Help()),
+                );
               },
             ),
           ],
@@ -67,6 +75,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Use errorBuilder for safer image loading
               Image.asset(
                 'assets/images/OSLogo.png',
                 height: 100,

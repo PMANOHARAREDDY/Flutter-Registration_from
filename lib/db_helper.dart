@@ -4,7 +4,6 @@ import 'package:path/path.dart';
 class DBHelper {
   static final DBHelper instance = DBHelper._();
   static Database? _db;
-  /// Singleton instance
   DBHelper._();
 
   Future<Database> get database async {
@@ -16,7 +15,7 @@ class DBHelper {
   Future<Database> _initDB(String filename) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filename);
-    /// users table
+    // Open/create users table
     return await openDatabase(
       path,
       version: 1,
@@ -27,14 +26,25 @@ class DBHelper {
             name TEXT,
             mobile TEXT,
             address TEXT,
-            password TEXT
-          );
+            password TEXT,
+            date_of_birth TEXT
+          )
         ''');
+
+        await db.execute('''
+         CREATE TABLE feedback (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT,
+          email TEXT,
+        ease_of_use TEXT,
+        comment TEXT
+        )
+  ''');
       },
     );
   }
 
-  /// CRUD methods
+  // CRUD methods:
 
   Future<int> insertUser(Map<String, dynamic> user) async {
     final db = await database;
@@ -60,7 +70,7 @@ class DBHelper {
     );
   }
 
-  /// to Check whether certain user is present or not
+  // Check if user exists
   Future<bool> userExists(String email) async {
     final db = await database;
     final res = await db.query('users',
@@ -69,4 +79,15 @@ class DBHelper {
     );
     return res.isNotEmpty;
   }
+
+  Future<int> insertFeedback(Map<String, dynamic> feedback) async {
+    final db = await database;
+    return await db.insert(
+      'feedback',
+      feedback,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+
 }

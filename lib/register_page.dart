@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/help.dart';
 import 'login_page.dart';
 import 'home_page.dart';
 import 'db_helper.dart';
@@ -11,13 +12,16 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  /// Controllers
+
+
+  // Controllers
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController dOBController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,17 +53,13 @@ class _RegisterPageState extends State<RegisterPage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.settings, color: Colors.amberAccent,),
-              title: const Text('Settings'),
-              onTap: () {
-                print("Bear up with us.... Under Development");
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.help, color: Colors.amberAccent,),
               title: const Text('Help & Feedback'),
-              onTap: () { 
-                print("Bear up with us.... Under Development");
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Help()),
+                );
               },
             ),
           ],
@@ -71,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: ListView(
             shrinkWrap: true,
             children: [
-              const Text('Name'),
+              const Text('Name*'),
               const SizedBox(height: 5),
               TextField(
                 controller: nameController,
@@ -81,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              const Text('Email'),
+              const Text('Email*'),
               const SizedBox(height: 5),
               TextField(
                 controller: emailController,
@@ -92,7 +92,33 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              const Text('Mobile'),
+              const Text('Date of Birth*'),
+              const SizedBox(height: 5),
+              TextField(
+                controller: dOBController,
+                readOnly: true,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Select your Date of Birth',
+                  suffixIcon: Icon(Icons.calendar_today),
+                ),
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime(2000),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
+
+                  String formattedDate = "${pickedDate?.day}/${pickedDate?.month}/${pickedDate?.year}";
+                  setState(() {
+                    dOBController.text = formattedDate;
+                  });
+                                },
+              ),
+
+              const SizedBox(height: 10),
+              const Text('Mobile*'),
               const SizedBox(height: 5),
               TextField(
                 controller: mobileController,
@@ -113,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              const Text('Password'),
+              const Text('Password*'),
               const SizedBox(height: 5),
               TextField(
                 controller: passwordController,
@@ -124,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              const Text('Confirm password'),
+              const Text('Confirm password*'),
               const SizedBox(height: 5),
               TextField(
                 controller: confirmPasswordController,
@@ -143,26 +169,59 @@ class _RegisterPageState extends State<RegisterPage> {
                   String address = addressController.text.trim();
                   String password = passwordController.text.trim();
                   String confirmPassword = confirmPasswordController.text.trim();
+                  String dob = dOBController.text.trim();
 
                   if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty ||
-                      mobile.isEmpty || name.isEmpty || address.isEmpty) {
+                      mobile.isEmpty || name.isEmpty || dob.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Please fill all the fields')),
                     );
                     return;
                   }
 
-                  if (password != confirmPassword) {
+                  final emailRegEx = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+                  if(!emailRegEx.hasMatch(email)){
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Passwords are not matching')),
+                        const SnackBar(content: Text('Please enter valid email address'))
                     );
                     return;
                   }
 
+                  final passwordRegEx = RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$');
+
+                  if (!passwordRegEx.hasMatch(password)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Password must have:\n'
+                              '- At least 8 characters\n'
+                              '- 1 uppercase letter\n'
+                              '- 1 number\n'
+                              '- 1 special character',
+                        ),
+                        duration: Duration(seconds: 4),
+                      ),
+                    );
+                    return;
+                  }
+
+
+                  final phoneRegEx = RegExp(r'^[6-9]\d{9}$');
+
+                  if (!phoneRegEx.hasMatch(mobile)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please enter a valid 10-digit phone number'),
+                      ),
+                    );
+                    return;
+                  }
+
+                  // Use SQLite
                   bool exists = await DBHelper.instance.userExists(email);
                   if (exists) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('This email is already registered, try logging in'))
+                        const SnackBar(content: Text('This email is already registered, try logging in'))
                     );
                     return;
                   }
@@ -173,9 +232,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     'mobile': mobile,
                     'address': address,
                     'password': password,
+                    'date_of_birth': dob
                   });
 
                   print('User Registered: $email -> $name, $mobile, $address');
+                  // Optionally clear fields here
 
                   Navigator.pushReplacement(
                     context,

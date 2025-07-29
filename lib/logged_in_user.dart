@@ -15,6 +15,7 @@ class LoggedInUser {
 
   static LoggedInUser get instance => _instance;
 
+  // Fill all values from a List (typically from DB)
   void setUser(String email, List<dynamic> userData) {
     this.email = email;
     name = userData[0];
@@ -23,14 +24,17 @@ class LoggedInUser {
     password = userData[3];
   }
 
+  // Update in-memory data only!
   void updateUser(String newName, String newMobile, String newAddress, String newPassword) {
     name = newName;
     mobile = newMobile;
     address = newAddress;
     password = newPassword;
+    // NO database writing here!
+    // Only update the DB from your UI or controller using DBHelper.
   }
 
-  /// Optionally, to clear and reset the data of singleton on logout
+  // Optionally, a helper to clear/reset the singleton (on logout)
   void clear() {
     name = null;
     email = null;
